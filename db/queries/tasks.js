@@ -18,3 +18,13 @@ export async function getTaskById(id) {
     const { rows: [task] } = await db.query(sql, [id]);
     return task;
 }
+
+
+export async function deleteTask(id) {
+    const sql = `
+        DELETE FROM tasks
+        WHERE id = $1;
+    `;
+    const result = await db.query(sql, [id]);
+    return result;
+} 

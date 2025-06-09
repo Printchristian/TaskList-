@@ -4,7 +4,7 @@ export default router;
 import requireBody from "#middleware/requireBody";
 import { createTask } from "#db/queries/tasks";
 import  requireUser  from "#middleware/requireUser";
-
+import { getTaskById } from "#db/queries/tasks";
 
 router.use(requireUser);
 
@@ -25,10 +25,12 @@ router.param("id", async (req, res, next, id) => {
         return res.status(403).send("You do not have permission to access this task");
     }
     req.task = task;
+
     next();
 });
 
 
 router.route("/:id").delete(async (req, res) => {
+    const result = await deleteTask(req.task.id);
     res.sendStatus(204);
 }); 
