@@ -5,7 +5,7 @@ import requireBody from "#middleware/requireBody";
 import { createTask } from "#db/queries/tasks";
 import  requireUser  from "#middleware/requireUser";
 import { getTaskById } from "#db/queries/tasks";
-
+import { deleteTask, updateTask } from "#db/queries/tasks";
 router.use(requireUser);
 
 
@@ -33,4 +33,9 @@ router.param("id", async (req, res, next, id) => {
 router.route("/:id").delete(async (req, res) => {
     const result = await deleteTask(req.task.id);
     res.sendStatus(204);
-}); 
+})
+.put(requireBody(["title", "done"]), async (req, res) => {
+    const { title, done } = req.body;
+    const updatedTask = await updateTask(title, done, req.task.id);
+    res.send(updatedTask);
+})
